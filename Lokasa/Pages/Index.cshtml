@@ -1,0 +1,106 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Authentification";
+    Layout = "_LayoutAuth";
+}
+
+<section class="hero is-fullheight">
+    <div class="hero-body">
+        <div class="container">
+            <div class="columns is-centered">
+                <div class="column is-4-widescreen is-4-desktop is-5-tablet">
+                    @if (Model.SuccessMessage != string.Empty)
+                    {
+                        <p>
+                            <div class="notification is-success is-light">
+                                <button class="delete"></button>
+                                <h2><strong>Super !</strong></h2>
+                                <p>@Model.SuccessMessage</p>
+                            </div>
+                        </p>
+                        
+                    }
+                    @if (Model.ErrorMessage != string.Empty)
+                    {
+                        <p>
+                            <div class="notification is-danger is-light">
+                                <button class="delete"></button>
+                                <h2><strong>Oups !</strong></h2>
+                                <p>@Model.ErrorMessage</p>
+                            </div>
+                        </p>
+                        
+                    }
+                    @if (Model.WarningMessage != string.Empty)
+                    {
+                        <p>
+                            <div class="notification is-warning is-light">
+                                <button class="delete"></button>
+                                <h2><strong>Attention !</strong></h2>
+                                <p>@Model.WarningMessage</p>
+                            </div>
+                        </p>
+                        
+                    }
+                    <form class="box" method="post">
+                        <h3 class="title has-text-primary has-text-centered">Se connecter</h3>
+                        <p>Vueillez saisir vos identifiants pour avoir accès</p><br />
+                        <div class="field">
+                            <label class="label" for="email">Login ou Email</label>
+                            <div class="control has-icons-left">
+                                <input type="text" class="input" id="email" name="email" asp-for="@Model.agent.Email"
+                                       placeholder="Saisissez votre identifiant" value="@Model.agent.Email" autofocus/>
+                                <span class="icon is-small is-left">
+                                    <i class="fa-solid fa-user"></i>
+                                </span>
+                            </div>
+                            @if (Model.EmptyField1 != string.Empty)
+                            {
+                                <p class="help is-danger">@Model.EmptyField1</p>
+                            }
+                        </div>
+                        <div class="field">
+                            <label class="label" for="pwd">Mot de passe</label>
+                            <div class="control has-icons-left">
+                                <input type="password" class="input" id="pwd" name="pwd" asp-for="@Model.agent.MotDePasse"
+                                       placeholder="••••••••••••••••••••" value="@Model.agent.MotDePasse" />
+                                <span class="icon is-small is-left">
+                                    <i class="fa-solid fa-key"></i>
+                                </span>
+                            </div>
+                            @if (Model.EmptyField2 != string.Empty)
+                            {
+                                <p class="help is-danger">@Model.EmptyField2</p>
+                            }
+                        </div>
+                        <div class="field is-centered">
+                            <div class="control">
+                                <input type="checkbox" id="apwd" class="checkbox" value=""
+                                       name="affiche_pwd" />&nbsp;<label for="apwd">Afficher le mot de passe</label>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <div class="control">
+                                <input type="submit" class="button is-success is-fullwidth" value="Se connecter">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>        
+    </div>
+</section>
+
+
+<script>
+    document.getElementById('apwd').onclick = function () {
+        var passwordInput = document.getElementById('pwd');
+        if (this.checked) {
+            passwordInput.type = 'text';
+        }
+        else {
+            passwordInput.type = 'password';
+        }
+    };
+</script>

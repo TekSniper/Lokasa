@@ -1,0 +1,227 @@
+﻿<!DOCTYPE html>
+<html lang="fr-fr" data-theme="light">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Lokasa</title>
+    <link href="~/lib/bulma/css/bulma.css" rel="stylesheet" />
+    <link href="~/lib/bulma/css/bulma.min.css" rel="stylesheet" />
+    <link href="~/lib/fontawesome/css/all.css" rel="stylesheet" />
+    <link href="~/lib/fontawesome/css/all.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/Lokasa.styles.css" asp-append-version="true" />
+    <style type="text/css">
+        .rotate {
+            transform: rotate(90deg);
+        }
+
+        .menu {
+            left: 0;
+            background: transparent !important;
+        }
+
+            .menu .menu-label {
+                font-weight: bolder;
+            }
+
+            .menu .menu-list .list {
+                position: relative;
+                cursor: pointer;
+            }
+
+            .menu .menu-list {
+            }
+
+                .menu .menu-list .list {
+                    background: transparent !important;
+                }
+
+                    .menu .menu-list .list .sub-list {
+                        background: transparent !important;
+                    }
+
+                        .menu .menu-list .list .sub-list .sub-menu {
+                            background: transparent !important;
+                        }
+
+                        .menu .menu-list .list .sub-list a:hover {
+                            background-color: rgba(0, 0, 0, 0.35);
+                        }
+
+                    .menu .menu-list .list a {
+                        display: block;
+                        color: #181818 !important;
+                        text-decoration: none;
+                        padding: 5px 25px;
+                        line-height: 30px;
+                    }
+
+                        .menu .menu-list .list a:hover {
+                            background-color: transparent !important;
+                            color: #111111;
+                            transition: 0.3s ease;
+                        }
+
+                        .menu .menu-list .list a .dropdown {
+                            position: absolute;
+                            right: 0;
+                            margin: 7.5px;
+                            transition: 0.3s ease;
+                        }
+
+                    .menu .menu-list .list .sub-list {
+                        display: block;
+                        overflow-x: hidden;
+                    }
+
+        .sub-menu {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+            .sub-menu.open {
+                max-height: 500px;
+            }
+
+            .sub-menu a {
+                color: #fff;
+                text-decoration: none;
+                padding: 15px 35px 10px;
+                line-height: 30px;
+            }
+
+        .menu .menu-list .list .sub-menu a:hover {
+            background: transparent !important;
+            color: #fff;
+            transition: 0.3s ease;
+        }
+
+        /*.menu .menu-list .list .sub-list:hover + .sub-menu, .sub-menu:hover {
+                            display:block;
+                            transition: 0.3s ease;
+                        }*/
+        #sidebar {
+            transition: 0.3s ease-in-out;
+            transform: translateX(-100%);
+        }
+
+            #sidebar.is-active {
+                transform: translateX(0);
+            }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="navbar is-fixed-top has-shadow mb-6" role="navigation" aria-label="main navigation">
+            <div class="navbar-brand">
+                <!-- navbar items, navbar burger... -->
+                <a class="navbar-item">
+                    <strong>LOKASA</strong>
+                </a>
+
+                <a class="navbar-burger is-active" role="button" aria-label="menu" aria-expanded="false">
+                    <span aria-hidden="true"></span>
+                    <span aria-hidden="true"></span>
+                    <span aria-hidden="true"></span>
+                    <span aria-hidden="true"></span>
+                </a>
+            </div>
+            <div class="navbar-menu is-active">
+                <!-- navbar start, navbar end -->
+                <div class="navbar-start">
+                    <span class="navbar-item">
+                        <i class="fa-solid fa-circle-user"></i> @Model.LoginAgent
+                    </span>
+                    <span class="navbar-item">
+                        <i class="fa-solid fa-briefcase"></i>&nbsp; @Model.FonctionAgent
+                    </span>
+                </div>                
+            </div>
+        </nav>
+    </header>
+    <div class="container is-fullhd mt-6 pt-5">
+        <div class="columns">
+            <div class="column is-2 ml-3">
+                <aside class="menu">
+                    @if(Model.FonctionAgent == "Directeur"){
+                        <p class="menu-label"><i class="fa-solid fa-user-gear"></i>&nbsp;Administrateur</p>
+                        <ul class="menu-list">
+                            <li class="list">
+                                <a href="/Admin/Dashboard" class="sub-list">
+                                    <i class="fa-solid fa-gauge"></i> Tableau de bord
+                                </a>
+                            </li>
+                            <li class="list">
+                                <a href="" class="sub-list">
+                                    <i class="fa-solid fa-clipboard-user"></i> Rapport présence
+                                </a>
+                            </li>
+                            <li class="list">
+                                <a href="" class="sub-list">
+                                    <i class="fa-solid fa-list-check"></i> Rapport taches
+                                </a>
+                            </li>
+                        </ul>
+                    }
+                    <p class="menu-label">Gestion de Présence</p>
+                    <ul class="menu-list">
+                        <li class="list">
+                            <a class="sub-list">
+                                <i class="fa-solid fa-business-time"></i> Arrivée
+                            </a>
+                        </li>
+                        <li class="list">
+                            <a class="sub-list">
+                                <i class="fa-solid fa-business-time"></i> Départ
+                            </a>
+                        </li>
+                        <li class="list">
+                            <a class="sub-list">
+                                <i class="fa-solid fa-clipboard-user"></i> Présence
+                            </a>
+                        </li>
+                    </ul>
+                    <p class="menu-label">Gestion des Tâches</p>
+                    <ul class="menu-list">
+                        <li class="list">
+                            <a class="sub-list">
+                                <i class="fa-solid fa-list-check"></i> Nouvelle tâche
+                            </a>
+                        </li>
+                        <li class="list">
+                            <a class="sub-list">
+                                <i class="fa-solid fa-list-check"></i> Liste des tâches
+                            </a>
+                        </li>
+                    </ul>
+                </aside>
+            </div>
+            <div class="column">
+                <div class="box">
+                    <main role="main" class="pb-3">
+                        @RenderBody()
+                    </main>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/lib/fontawesome/js/all.js"></script>
+    <script src="~/lib/fontawesome/js/all.min.js"></script>
+    <script>
+                document.addEventListener('DOMContentLoaded', () => {
+          (document.querySelectorAll('.notification .delete') || []).forEach(($delete) => {
+            const $notification = $delete.parentNode;
+
+            $delete.addEventListener('click', () => {
+              $notification.parentNode.removeChild($notification);
+            });
+          });
+        });
+    </script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
