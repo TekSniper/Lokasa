@@ -17,15 +17,21 @@
 {
     <h3 class="title">Pointer votre arrivée</h3>
     <form method="post">
-        <div class="field">
-            <label for="heure_a" class="label">heure d'arrivée</label>
-            <div class="control has-icons-left">
-                <input type="time" name="heure" id="heure_a" class="input" value="@Model.presence.HeureArrivee" />
-                <span class="icon is-small is-left">
-                    <i class="fa-solid fa-business-time"></i>
-                </span>
+        <div class="columns">
+            <div class="column is-4">
+                <div class="field">
+                    <label for="heure_a" class="label">heure d'arrivée</label>
+                    <div class="control has-icons-left">
+                        <input type="time" name="heure" id="heure_a" class="input is-3"
+                            value="@Model.presence.HeureArrivee" />
+                        <span class="icon is-small is-left">
+                            <i class="fa-solid fa-business-time"></i>
+                        </span>
+                    </div>
+                </div>
             </div>
         </div>
+
         <div class="field">
             <div class="control">
                 <input type="submit" value="Pointer" class="button is-success">
