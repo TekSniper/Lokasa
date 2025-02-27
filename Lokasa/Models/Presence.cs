@@ -41,11 +41,29 @@ namespace Lokasa.Models
                 cm.CommandType = System.Data.CommandType.StoredProcedure;
                 cm.Parameters.AddWithValue("vagent", IdAgent);
                 cm.Parameters.AddWithValue("vheured",HeureDepart);
+                cm.Parameters.AddWithValue("vdate",DatePresence);
                 var i = cm.ExecuteNonQuery();
                 if(i != 0)
                     isTrue = true; 
                 else
                     isTrue = false;
+            }
+
+            return isTrue;
+        }
+        public bool CheckPresence() {
+            var isTrue = false;
+            using(var cnx = new DbConnexion().GetConnection()) {
+                cnx.Open();
+                var cm = new MySqlCommand("select * from presence where idagent=@agent and date_presence=@date and heure_arrivee is not null",cnx);
+                cm.Parameters.AddWithValue("@agent",IdAgent);
+                cm.Parameters.AddWithValue("@date",DatePresence);
+                using(var reader = cm.ExecuteReader()){
+                    if(reader.HasRows)
+                        isTrue = true;
+                    else
+                        isTrue = false;
+                }
             }
 
             return isTrue;

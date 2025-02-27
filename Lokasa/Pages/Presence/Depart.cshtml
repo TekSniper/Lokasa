@@ -1,4 +1,35 @@
 ﻿@page
 @model Lokasa.Pages.Presence.DepartModel
 @{
+    ViewData["title"] = "Départ";
+}
+@if (Model.WarningMessage != string.Empty)
+{
+    <p>
+    <div class="notification is-warning is-light">
+        <button class="delete"></button>
+        <h2><strong>Attention !</strong></h2>
+        <p>@Model.WarningMessage</p>
+    </div>
+    </p>
+}
+@if (Model.WarningMessage.Length == 0)
+{
+    <h3 class="title">Pointer votre arrivée</h3>
+    <form method="post">
+        <div class="field">
+            <label for="heure_d" class="label">heure de départ</label>
+            <div class="control has-icons-left">
+                <input type="time" name="heure" id="heure_d" class="input" value="@Model.presence.HeureArrivee" />
+                <span class="icon is-small is-left">
+                    <i class="fa-solid fa-business-time"></i>
+                </span>
+            </div>
+        </div>
+        <div class="field">
+            <div class="control">
+                <input type="submit" value="Pointer sortie" class="button is-success">
+            </div>
+        </div>
+    </form>
 }
