@@ -1,7 +1,7 @@
 ﻿@page
-@model Lokasa.Pages.Tache.CreerModel
+@model Lokasa.Pages.Tache.DetailsModel
 @{
-    ViewData["title"] = "Nouvelle tâche";
+    ViewData["title"] = "Détails de la tâche";
 }
 @if (Model.WarningMessage != string.Empty)
 {
@@ -33,9 +33,11 @@
     </div>
     </p>
 }
-<h3 class="title">Enregistrer les tâches</h3>
-<h5 class="subtitle">Remplissez le formulaire pour enregistrer vos tâches de la journée</h5>
+<h3 class="title">Modification d'une tâche</h3>
+<h5 class="subtitle">Vous êtes entrain de modifier la tâche @Model.tache.Titre</h5>
 <form method="post">
+    <input type="hidden" name="id" value="@Model.tache.Id" />
+    <input type="hidden" name="idAgent" value="@Model.tache.IdAgent" />
     <div class="columns">
         <div class="column">
             <div class="field">
@@ -103,7 +105,7 @@
     </div>
     <div class="field is-grouped">
         <div class="control">
-            <input type="submit" value="Valider" class="button is-success">
+            <input type="submit" value="Modifier" class="button is-success">
         </div>
         <div class="control">
             <input type="reset" value="Réinitialiser" class="is-danger is-outlined">

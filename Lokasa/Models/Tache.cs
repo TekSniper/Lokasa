@@ -4,7 +4,7 @@ namespace Lokasa.Models
 {
     public class Tache
     {
-        public int Id { get; set; }
+        public long Id { get; set; }
         public int IdAgent { get; set; }
         public string Titre { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;

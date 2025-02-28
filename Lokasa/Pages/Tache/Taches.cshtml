@@ -1,4 +1,89 @@
 ﻿@page
 @model Lokasa.Pages.Tache.TachesModel
 @{
+    ViewData["title"] = "Les taches";
 }
+<h3 class="title">Présence des agents</h3>
+@if (Model.FonctionAgent == "Directeur")
+{
+    <div class="mb-4">
+        <form method="get">
+            <h5 class="subtitle">Filtre</h5>
+            <div class="columns">
+                <div class="column is-3">
+                    <div class="field">
+                        <div class="control">
+                            <input type="date" name="date" class="input" id="date" />
+                        </div>
+                    </div>
+                </div>
+                <div class="column is-4">
+                    <div class="field has-addons">
+                        <div class="control">
+                            <input type="text" name="agent" class="input" p placeholder="Login ou Email des l'agent" />
+                        </div>
+                        <div class="control">
+                            <input type="submit" value="Filtrez" class="button is-link" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+}
+@if (Model.FonctionAgent != "Directeur")
+{
+    <div class="mb-4">
+        <form method="get">
+            <h5 class="subtitle">Filtre</h5>
+            <div class="columns">
+                <div class="column is-3">
+                    <div class="field has-addons">
+                        <div class="control">
+                            <input type="date" name="date" class="input" id="date" />
+                        </div>
+                    </div>
+                    <div class="control">
+                        <input type="submit" value="Filtrez" class="button is-link" />
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+}
+<table class="table is-striped is-narrow is-hoverable is-fullwidth">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>ID Agent</th>
+            <th>Titre</th>
+            <th>Date debut</th>
+            <th>Date fin</th>
+            <th>Etat</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.taches)
+        {
+            <tr>
+                <td>@item.Id</td>
+                <td>@item.IdAgent</td>
+                <td>@item.Titre</td>
+                <td>@item.DateDebut</td>
+                <td>@item.DateFin</td>
+                @if(item.Etat == "En cours"){
+                    <td class="has-text-link has-text-weight-semibold">@item.Etat</td>
+                }
+                @if(item.Etat == "Validée"){
+                    <td class="has-text-success has-text-weight-semibold">@item.Etat</td>
+                }
+                @if(item.Etat == "Echec"){
+                    <td class="has-text-danger has-text-weight-semibold">@item.Etat</td>
+                }
+                <td>
+                    <a href="/Tache/Details?ID=@item.Id" class="button is-small is-link">Details</a>
+                </td>
+            </tr>
+        }
+    </tbody>
