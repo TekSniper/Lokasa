@@ -3,6 +3,16 @@
 @{
     ViewData["title"] = "Presence";
 }
+@if (Model.ErrorMessage.Length > 0)
+{
+    <p>
+    <div class="notification is-danger is-light">
+        <button class="delete"></button>
+        <h2><strong>Attention !</strong></h2>
+        <p>@Model.ErrorMessage</p>
+    </div>
+    </p>
+}
 <h3 class="title">Présence des agents</h3>
 <div class="mb-4">
     <form method="get">
@@ -18,7 +28,7 @@
             <div class="column is-4">
                 <div class="field has-addons">
                     <div class="control">
-                        <input type="text" name="agent" class="input"p placeholder="Login ou Email des l'agent" />
+                        <input type="text" name="agent" class="input" p placeholder="Login ou Email des l'agent" />
                     </div>
                     <div class="control">
                         <input type="submit" value="Filtrez" class="button is-link" />

@@ -3,7 +3,14 @@
 @{
     ViewData["title"] = "Les taches";
 }
-<h3 class="title">Présence des agents</h3>
+@if(Model.FonctionAgent == "Directeur")
+{
+    <h3 class="title">Consultez les tâches des agents</h3>
+}
+@if(Model.FonctionAgent != "Directeur")
+{
+    <h3 class="title">Consultez vos tâchess</h3>
+}
 @if (Model.FonctionAgent == "Directeur")
 {
     <div class="mb-4">

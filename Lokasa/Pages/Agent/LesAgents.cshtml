@@ -1,0 +1,61 @@
+﻿@page
+@model Lokasa.Pages.Agent.LesAgentsModel
+@{
+    ViewData["title"] = "Les agents";
+}
+<h3 class="title">Les agents</h3>
+<div class="mb-4">
+    <form method="get">
+        <h5 class="subtitle">Filtre</h5>
+        <div class="columns">
+            <div class="column is-4">
+                <div class="field has-addons">
+                    <div class="control">
+                        <input type="text" name="manlog" class="input" placeholder="Matricule ou Nom ou Login" />
+                    </div>
+                    <div class="control">
+                        <input type="submit" value="Filtrez" class="button is-link" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<table class="table is-striped is-narrow is-hoverable is-fullwidth">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Service</th>
+            <th>Matricule</th>
+            <th>Nom & Prénom</th>
+            <th>Sexe</th>
+            <th>Login</th>
+            <th>Fonction</th>
+            <th>Etat</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(var i in Model.agents)
+        {
+            <tr>
+                <td>@i.Id</td>
+                <td>@i.IdService</td>
+                <td>@i.Matricule</td>
+                <td>@i.Nom @i.Prenom</td>
+                <td>@i.Genre</td>
+                <td>@i.Email</td>
+                <td>@i.Fonction</td>
+                <td>@i.Etat</td>
+                <td>
+                    <a class="button is-link is-small">
+                        Détails
+                    </a>
+                    <a class="button is-danger is-small">
+                        Désactiver
+                    </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

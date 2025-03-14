@@ -1,3 +1,7 @@
+global using Lokasa.Models;
+global using MySql.Data.MySqlClient;
+global using System.Security.Cryptography;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.

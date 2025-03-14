@@ -12,7 +12,7 @@ namespace Lokasa.Pages.Tache
         public string ErrorMessage { get; set; } = string.Empty;
         public string SuccessMessage { get; set; } = string.Empty;
         public Models.Presence presence = new Models.Presence();
-        public Agent agent = new Agent();
+        public Models.Agent agent = new Models.Agent();
         public Models.Tache tache = new Models.Tache();
         public void OnGet()
         {
@@ -24,7 +24,7 @@ namespace Lokasa.Pages.Tache
                 Response.Redirect("/");
             else
             {
-                presence.DatePresence = DateTime.Now;
+                presence.DatePresence = DateTime.Now.Date;
                 presence.IdAgent = agent.GetId();
                 var estPresent = presence.CheckPresence();
                 if (estPresent)

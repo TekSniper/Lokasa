@@ -12,7 +12,7 @@ namespace Lokasa.Pages.Presence
         public string WarningMessage { get; set; } = string.Empty;
         public string ErrorMessage { get; set; } = string.Empty;
         public Models.Presence presence = new Models.Presence();
-        public Agent agent = new Agent();
+        public Models.Agent agent = new Models.Agent();
         public void OnGet()
         {
             LoginAgent = HttpContext.Session.GetString("Login")!;
@@ -23,7 +23,7 @@ namespace Lokasa.Pages.Presence
                 Response.Redirect("/");
             else
             {
-                presence.DatePresence = DateTime.Now;
+                presence.DatePresence = DateTime.Now.Date;
                 presence.IdAgent = agent.GetId();
                 var estPresent = presence.CheckPresence();
                 if (estPresent)

@@ -13,19 +13,44 @@
     </div>
     </p>
 }
+@if (Model.ErrorMessage != string.Empty)
+{
+    <p>
+    <div class="notification is-danger is-light">
+        <button class="delete"></button>
+        <h2><strong>Erreur !</strong></h2>
+        <p>@Model.ErrorMessage</p>
+    </div>
+    </p>
+}
+@if (Model.SuccessMessage != string.Empty)
+{
+    <p>
+    <div class="notification is-info is-light">
+        <button class="delete"></button>
+        <h2><strong>Info !</strong></h2>
+        <p>@Model.SuccessMessage</p>
+    </div>
+    </p>
+}
 @if (Model.WarningMessage.Length == 0)
 {
-    <h3 class="title">Pointer votre arrivée</h3>
+    <h3 class="title">Pointer votre départ</h3>
     <form method="post">
-        <div class="field">
-            <label for="heure_d" class="label">heure de départ</label>
-            <div class="control has-icons-left">
-                <input type="time" name="heure" id="heure_d" class="input" value="@Model.presence.HeureArrivee" />
-                <span class="icon is-small is-left">
-                    <i class="fa-solid fa-business-time"></i>
-                </span>
+        <div class="columns">
+            <div class="column is-4">
+                <div class="field">
+                    <label for="heure_d" class="label">Heure de départ</label>
+                    <div class="control has-icons-left">
+                        <input type="time" name="heure" id="heure_d" class="input" value="@Model.presence.HeureDepart" />
+                        <span class="icon is-small is-left">
+                            <i class="fa-solid fa-business-time"></i>
+                        </span>
+                    </div>
+                </div>
             </div>
         </div>
+        
         <div class="field">
             <div class="control">
                 <input type="submit" value="Pointer sortie" class="button is-success">

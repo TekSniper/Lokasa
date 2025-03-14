@@ -87,7 +87,7 @@
         <div class="column is-4">
             <label for="etat" class="label">Etat</label>
             <div class="control">
-                <div class="select">
+                <div class="select is-fullwidth">
                     <select name="etat" id="etat">
                         <option value="En cours">En cours</option>
                         <option value="Validée">Validée</option>
@@ -100,7 +100,7 @@
     <div class="field">
         <label for="comment" class="label">Commentaire</label>
         <div class="control">
-            <textarea name="commentaire" id="comment" class="textarea" placeholder="Votre commentaire ici..."></textarea>
+            <textarea name="commentaire" id="comment" class="textarea" placeholder="Votre commentaire ici..." value="@Model.tache.Description"></textarea>
         </div>
     </div>
     <div class="field is-grouped">

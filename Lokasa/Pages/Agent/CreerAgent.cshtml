@@ -1,0 +1,139 @@
+﻿@page
+@model Lokasa.Pages.Agent.CreerAgentModel
+@{
+    ViewData["title"] = "Creation compte agent";
+}
+@if (Model.SuccessMessage != string.Empty)
+{
+    <p>
+        <div class="notification is-success is-light">
+            <button class="delete"></button>
+            <h2><strong>Super !</strong></h2>
+            <p>@Model.SuccessMessage</p>
+        </div>
+    </p>
+
+}
+@if (Model.ErrorMessage != string.Empty)
+{
+    <p>
+        <div class="notification is-danger is-light">
+            <button class="delete"></button>
+            <h2><strong>Oups !</strong></h2>
+            <p>@Model.ErrorMessage</p>
+        </div>
+    </p>
+
+}
+@if (Model.WarningMessage != string.Empty)
+{
+    <p>
+        <div class="notification is-warning is-light">
+            <button class="delete"></button>
+            <h2><strong>Attention !</strong></h2>
+            <p>@Model.WarningMessage</p>
+        </div>
+    </p>
+
+}
+<h3 class="title">Nouveau compte</h3>
+<form method="post">
+    <div class="columns">
+        <div class="column">
+            <div class="field">
+                <label class="label" for="matricule">Matricule</label>
+                <div class="control">
+                    <input type="text" class="input" name="matricule" id="matricule" placeholder="Numéro matricule" required autofocus value="@Model.agent.Matricule" />
+                </div>
+            </div>
+        </div>
+        <div class="column">
+            <div class="field">
+                <label class="label" for="service">Service</label>
+                <div class="control">
+                    <div class="select is-fullwidth">
+                        <select name="service" id="service">
+                            @foreach(var service in Model.GetServices())
+                            {
+                                <option value="@service.Id">@service.Designation</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="columns">
+        <div class="column">
+            <div class="field">
+                <label class="label" for="nom">Nom</label>
+                <div class="control">
+                    <input type="text" class="input" name="nom" id="nom" value="@Model.agent.Nom" placeholder="Nom de l'agent" required />
+                </div>
+            </div>
+        </div>
+        <div class="column">
+            <div class="field">
+                <label class="label" for="postnom">Post-Nom</label>
+                <div class="control">
+                    <input type="text" class="input" name="postnom" id="postnom" value="@Model.agent.Nom" placeholder="Post-Nom de l'agent" required />
+                </div>
+            </div>
+        </div>
+        <div class="column">
+            <div class="field">
+                <label class="label" for="prenom">Prénom</label>
+                <div class="control">
+                    <input type="text" class="input" name="prenom" id="nom" value="@Model.agent.Nom" placeholder="Prénom de l'agent" required />
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="columns">
+        <div class="column">
+            <div class="field">
+                <label class="label" for="sexe">Sexe</label>
+                <div class="control">
+                    <div class="select is-fullwidth">
+                        <select name="sexe" id="sexe">
+                            <option value="Masculin">Masculin</option>
+                            <option value="Féminin">Féminin</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="column">
+            <div class="field">
+                <label class="label" for="fonction">Fonction</label>
+                <div class="control">
+                    <div class="select is-fullwidth">
+                        <select name="fonction" id="fonction">
+                            @foreach (var fn in Model.GetFonctions())
+                            {
+                                <option value="@fn.Designation">@fn.Designation</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="column">
+            <div class="field">
+                <label class="label" for="email">Email ou Login</label>
+                <div class="control">
+                    <input type="text" class="input" name="email" id="email" placeholder="Créer un identifiant" required value="@Model.agent.Email" />
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="field is-grouped">
+        <div class="control">
+            <input type="submit" class="button is-success" value="Créer" />
+        </div>
+        <div class="control">
+            <input type="reset" class="button is-danger is-outlined" value="Annuler" />
+        </div>
+    </div>
+</form>

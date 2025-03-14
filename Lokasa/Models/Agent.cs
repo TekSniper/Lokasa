@@ -1,6 +1,4 @@
-﻿using MySql.Data.MySqlClient;
-using System.Security.Cryptography;
-using System.Text;
+﻿using System.Text;
 
 namespace Lokasa.Models
 {
@@ -17,10 +15,11 @@ namespace Lokasa.Models
         public string MotDePasse { get; set; } = string.Empty;
         public string Fonction {  get; set; } = string.Empty;
         public string Etat {  get; set; } = string.Empty;
-        
+        private bool _isTrue { get; set; } = false;
+
+
         public bool Create()
         {
-            var isTrue = false;
             using(var cnx=new DbConnexion().GetConnection())
             {
                 cnx.Open();
@@ -36,13 +35,33 @@ namespace Lokasa.Models
                 cm.Parameters.AddWithValue("vpwd", this.MotDePasse);
                 cm.Parameters.AddWithValue("vfonction", this.Fonction);
                 cm.Parameters.AddWithValue("vetat", this.Etat);
+                var i = cm.ExecuteNonQuery();
+                if (i != 0)
+                    _isTrue = true;
+                else
+                    _isTrue = false;
             }
 
-            return isTrue;
+            return _isTrue;
+        }
+        public bool UpdatePwd()
+        {
+            using(var cnx = new DbConnexion().GetConnection())
+            {
+                cnx.Open();
+                var cm = new MySqlCommand("update agent set mot_de_passe=@pwd where email=@email", cnx);
+                cm.Parameters.AddWithValue("@pwd", this.MotDePasse);
+                cm.Parameters.AddWithValue("@email", this.Email);
+                var i = cm.ExecuteNonQuery();
+                if (i != 0)
+                    _isTrue = true;
+                else
+                    _isTrue = false;
+            }
+            return _isTrue;
         }
         public bool ChangeStatus()
         {
-            var isTrue = false;
             using(var cnx = new DbConnexion().GetConnection())
             {
                 cnx.Open();
@@ -50,9 +69,14 @@ namespace Lokasa.Models
                 cm.CommandType= System.Data.CommandType.StoredProcedure;
                 cm.Parameters.AddWithValue("vetat",this.Etat);
                 cm.Parameters.AddWithValue("vlogin",this.Email);
+                var i = cm.ExecuteNonQuery();
+                if (i != 0)
+                    _isTrue = true;
+                else
+                    _isTrue = false;
             }
 
-            return isTrue;
+            return _isTrue;
         }
         public int GetId()
         {
@@ -101,7 +125,6 @@ namespace Lokasa.Models
         }
         public bool Authentification()
         {
-            var isTrue = false;
             using (var cnx = new DbConnexion().GetConnection())
             {
                 cnx.Open();
@@ -110,14 +133,13 @@ namespace Lokasa.Models
                 cm.Parameters.AddWithValue("@pwd", this.MotDePasse);
                 var reader = cm.ExecuteReader();
                 if (reader.Read())
-                    isTrue = true;
+                    _isTrue = true;
             }
 
-            return isTrue;
+            return _isTrue;
         }
         public bool Exists()
         {
-            var isTrue = false;
             using(var cnx = new DbConnexion().GetConnection())
             {
                 cnx.Open();
@@ -125,12 +147,28 @@ namespace Lokasa.Models
                 cm.Parameters.AddWithValue("@email", Email);
                 var count = (long)cm.ExecuteScalar();
                 if (count == 0)
-                    isTrue = false;
+                    _isTrue = false;
                 else
-                    isTrue = true;
+                    _isTrue = true;
             }
 
-            return isTrue;
+            return _isTrue;
+        }
+        public bool IsDefaultPassword(string ParamPwd)
+        {
+            using(var cnx = new DbConnexion().GetConnection())
+            {
+                cnx.Open();
+                var cm = new MySqlCommand("select * from agent where email=@email and mot_de_passe=@pwd", cnx);
+                cm.Parameters.AddWithValue("@email", this.Email);
+                cm.Parameters.AddWithValue("@pwd", ParamPwd);
+                var reader = cm.ExecuteReader();
+                if(reader.Read())
+                    _isTrue = true;
+                else
+                    _isTrue = false;
+            }
+            return _isTrue;
         }
     }
 }

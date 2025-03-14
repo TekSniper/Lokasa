@@ -1,7 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Lokasa.Models;
-using MySql.Data.MySqlClient;
 
 namespace Lokasa.Pages.Tache
 {
@@ -12,7 +10,7 @@ namespace Lokasa.Pages.Tache
         public string WarningMessage { get; set; } = string.Empty;
         public string ErrorMessage { get; set; } = string.Empty;
         public string SuccessMessage { get; set; } = string.Empty;
-        public Agent agent = new Agent();
+        public Models.Agent agent = new Models.Agent();
         public Models.Tache tache = new Models.Tache();
         public List<Models.Tache> taches = new List<Models.Tache>();
         public void OnGet()
@@ -28,11 +26,11 @@ namespace Lokasa.Pages.Tache
                 {
                     if (Request.Query["Date"].ToString() == null)
                     {
-                        tache.DateDebut = DateTime.Now;
+                        tache.DateDebut = DateTime.Now.Date;
                     }
                     else
                     {
-                        tache.DateDebut = DateTime.Parse(Request.Query["Date"].ToString());
+                        tache.DateDebut = DateTime.Parse(Request.Query["Date"].ToString()).Date;
                     }
                     if (FonctionAgent == "Directeur")
                     {
@@ -103,9 +101,10 @@ namespace Lokasa.Pages.Tache
                         using (var cnx = new DbConnexion().GetConnection())
                         {
                             cnx.Open();
-                            var cm = new MySqlCommand("TaskAgent", cnx);
+                            var cm = new MySqlCommand("TaskAgentByDate", cnx);
                             cm.CommandType = System.Data.CommandType.StoredProcedure;
                             cm.Parameters.AddWithValue("vagent", tache.IdAgent);
+                            cm.Parameters.AddWithValue("vdate", Convert.ToDateTime(Request.Query["date"]).Date);
                             using (var reader = cm.ExecuteReader())
                             {
                                 while (reader.Read())

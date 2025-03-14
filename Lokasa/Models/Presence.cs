@@ -55,18 +55,33 @@ namespace Lokasa.Models
             var isTrue = false;
             using(var cnx = new DbConnexion().GetConnection()) {
                 cnx.Open();
-                var cm = new MySqlCommand("select * from presence where idagent=@agent and date_presence=@date and heure_arrivee is not null",cnx);
+                var cm = new MySqlCommand("select count(*) from presence where idagent=@agent and date_presence=@date and heure_arrivee is not null",cnx);
                 cm.Parameters.AddWithValue("@agent",IdAgent);
                 cm.Parameters.AddWithValue("@date",DatePresence);
-                using(var reader = cm.ExecuteReader()){
-                    if(reader.HasRows)
-                        isTrue = true;
-                    else
+                var reader = cm.ExecuteReader();
+                if(reader.Read())
+                {
+                    if (reader.GetInt64(0) == 0)
                         isTrue = false;
+                    else
+                        isTrue = true;
                 }
             }
 
             return isTrue;
+        }
+        public TimeSpan GetHeureArrivee(){
+            var heure= DateTime.Now.TimeOfDay;
+            using(var cnx = new DbConnexion().GetConnection()){
+                cnx.Open();
+                var cm = new MySqlCommand("SELECT p.heure_arrivee FROM presence p WHERE p.date_presence=@date AND p.idagent=@agent", cnx);
+                cm.Parameters.AddWithValue("@agent",IdAgent);
+                cm.Parameters.AddWithValue("@date",DatePresence);
+                var reader = cm.ExecuteReader();
+                if(reader.Read())
+                    heure = reader.GetTimeSpan(0);
+            }
+            return heure;
         }
     }
 }

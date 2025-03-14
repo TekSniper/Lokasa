@@ -1,0 +1,108 @@
+﻿@page
+@model Lokasa.Pages.Agent.ChangerMotDePasseModel
+@{
+    ViewData["title"] = "Mise à jour mot de passe";
+    Layout = "_LayoutAuth";
+}
+<section class="hero is-fullheight">
+    <div class="hero-body">
+        <div class="container">
+            <div class="columns is-centered">
+                <div class="column is-4-widescreen is-4-desktop is-5-tablet">
+                    @if (Model.SuccessMessage != string.Empty)
+                    {
+                        <p>
+                            <div class="notification is-success is-light">
+                                <button class="delete"></button>
+                                <h2><strong>Super !</strong></h2>
+                                <p>@Model.SuccessMessage</p>
+                            </div>
+                        </p>
+
+                    }
+                    @if (Model.ErrorMessage != string.Empty)
+                    {
+                        <p>
+                            <div class="notification is-danger is-light">
+                                <button class="delete"></button>
+                                <h2><strong>Oups !</strong></h2>
+                                <p>@Model.ErrorMessage</p>
+                            </div>
+                        </p>
+
+                    }
+                    @if (Model.WarningMessage != string.Empty)
+                    {
+                        <p>
+                            <div class="notification is-warning is-light">
+                                <button class="delete"></button>
+                                <h2><strong>Attention !</strong></h2>
+                                <p>@Model.WarningMessage</p>
+                            </div>
+                        </p>
+
+                    }
+                    <h3 class="title has-text-primary has-text-centered">Nouveau mot de passe</h3>
+                    <p class="has-text-centered">Vous vous êtes connectées avec un mot de passe par defaut. Vueillez changer votre mot de passe.</p><br />
+                    <form class="box" method="post">
+                        <div class="field">
+                            <label class="label" for="pwd">Nouveau mot de passe</label>
+                            <div class="control has-icons-left">
+                                <input type="password" class="input" id="pwd" name="pwd" asp-for="@Model.agent.Email"
+                                       placeholder="••••••••••••••••••••" value="@Model.agent.MotDePasse" autofocus />
+                                <span class="icon is-small is-left">
+                                    <i class="fa-solid fa-key"></i>
+                                </span>
+                            </div>
+                            @if (Model.ConfirmPwd != string.Empty)
+                            {
+                                <p class="help is-danger">@Model.ConfirmPwd</p>
+                            }
+                        </div>
+                        <div class="field">
+                            <label class="label" for="confPwd">Confirmer mot de passe</label>
+                            <div class="control has-icons-left">
+                                <input type="password" class="input" id="confPwd" name="confPwd" asp-for="@Model.agent.MotDePasse"
+                                       placeholder="••••••••••••••••••••" />
+                                <span class="icon is-small is-left">
+                                    <i class="fa-solid fa-key"></i>
+                                </span>
+                            </div>
+                            @if (Model.ConfirmPwd != string.Empty)
+                            {
+                                <p class="help is-danger">@Model.ConfirmPwd</p>
+                            }
+                        </div>
+                        <div class="field is-centered">
+                            <div class="control">
+                                <input type="checkbox" id="apwd" class="checkbox" value=""
+                                       name="affiche_pwd" />&nbsp;<label for="apwd">Afficher le mot de passe</label>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <div class="control">
+                                <input type="submit" class="button is-success is-fullwidth" value="Valider et se connecter">
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<script>
+    document.getElementById('apwd').onclick = function () {
+        var passwordInput = document.getElementById('pwd');
+        var passwordInput2 = document.getElementById('confPwd');
+        if (this.checked) {
+            passwordInput.type = 'text';
+            passwordInput2.type = 'text';
+        }
+        else {
+            passwordInput.type = 'password';
+            passwordInput2.type = 'password';
+        }
+    };
+</script>

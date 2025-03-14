@@ -1,14 +1,13 @@
 using Lokasa.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using System.Security.Cryptography;
 using System.Text;
 
 namespace Lokasa.Pages
 {
     public class IndexModel : PageModel
     {
-        public Agent agent = new Agent();
+        public Models.Agent agent = new Models.Agent();
         public string SuccessMessage { get; set; }= string.Empty;
         public string ErrorMessage { get; set; } = string.Empty;
         public string WarningMessage { get; set; } = string.Empty;
@@ -18,10 +17,6 @@ namespace Lokasa.Pages
         public string FonctionAgent { get; set; } = string.Empty;
         private readonly ILogger<IndexModel> _logger;
 
-        public IndexModel(ILogger<IndexModel> logger)
-        {
-            _logger = logger;
-        }
         private string EncryptPassword(string stringToEncrypt)
         {
             var pwd_encrypted = string.Empty;
@@ -38,6 +33,10 @@ namespace Lokasa.Pages
             }
 
             return pwd_encrypted;
+        }
+        public IndexModel(ILogger<IndexModel> logger)
+        {
+            _logger = logger;
         }
         public void OnGet()
         {
@@ -88,17 +87,27 @@ namespace Lokasa.Pages
                                     {
                                         case true:
                                             {
-                                                HttpContext.Session.SetString("Login", agent.Email);
-                                                HttpContext.Session.SetString("Fonction", agent.GetFonction());
-                                                var fx = HttpContext.Session.GetString("Fonction");
-                                                if (fx == "Directeur")
+                                                var isDefaultPwd = agent.IsDefaultPassword(EncryptPassword("123456"));
+                                                if (isDefaultPwd)
                                                 {
-                                                    Response.Redirect("/Admin/Dashboard");
+                                                    HttpContext.Session.SetString("Login", agent.Email);
+                                                    HttpContext.Session.SetString("Fonction", agent.GetFonction());
+                                                    Response.Redirect("/Agent/ChangerMotDePasse");
                                                 }
                                                 else
                                                 {
-                                                    Response.Redirect("/Presence/Presence");
-                                                }
+                                                    HttpContext.Session.SetString("Login", agent.Email);
+                                                    HttpContext.Session.SetString("Fonction", agent.GetFonction());
+                                                    var fx = HttpContext.Session.GetString("Fonction");
+                                                    if (fx == "Directeur")
+                                                    {
+                                                        Response.Redirect("/Admin/Dashboard");
+                                                    }
+                                                    else
+                                                    {
+                                                        Response.Redirect("/Presence/Presence");
+                                                    }
+                                                }                                                
                                             }
                                             break;
                                         case false:
