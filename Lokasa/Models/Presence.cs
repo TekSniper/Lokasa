@@ -70,6 +70,27 @@ namespace Lokasa.Models
 
             return isTrue;
         }
+        public bool CheckDepart()
+        {
+            var isTrue = false;
+            using(var cnx = new DbConnexion().GetConnection())
+            {
+                cnx.Open();
+                var cm = new MySqlCommand("select count(*) from presence where idagent=@agent and date_presence=@date and heur_depart is not null", cnx);
+                cm.Parameters.AddWithValue("@agent", IdAgent);
+                cm.Parameters.AddWithValue("@date", DatePresence);
+                var reader = cm.ExecuteReader();
+                if (reader.Read()) 
+                {
+                    if(reader.GetInt64(0) == 0)
+                        isTrue = false;
+                    else
+                        isTrue = true;
+                }
+            }
+
+            return isTrue;
+        }
         public TimeSpan GetHeureArrivee(){
             var heure= DateTime.Now.TimeOfDay;
             using(var cnx = new DbConnexion().GetConnection()){

@@ -10,7 +10,7 @@ namespace Lokasa.Models
         public string Description { get; set; } = string.Empty;
         public DateTime DateDebut { get; set; }
         public DateTime DateFin { get; set; }
-        public string Etat { get; set; } = string.Empty;
+        public byte Etat { get; set; } 
         public string Commentaire { get; set; } = string.Empty;
         private bool _isTrue = false;
         public bool Create()

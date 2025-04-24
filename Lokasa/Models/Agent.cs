@@ -17,7 +17,6 @@ namespace Lokasa.Models
         public string Etat {  get; set; } = string.Empty;
         private bool _isTrue { get; set; } = false;
 
-
         public bool Create()
         {
             using(var cnx=new DbConnexion().GetConnection())
@@ -32,7 +31,7 @@ namespace Lokasa.Models
                 cm.Parameters.AddWithValue("vprenom", this.Prenom);
                 cm.Parameters.AddWithValue("vgenre", this.Genre);
                 cm.Parameters.AddWithValue("vlogin", this.Email);
-                cm.Parameters.AddWithValue("vpwd", this.MotDePasse);
+                cm.Parameters.AddWithValue("vpwd", BCrypt.Net.BCrypt.HashPassword(this.MotDePasse));
                 cm.Parameters.AddWithValue("vfonction", this.Fonction);
                 cm.Parameters.AddWithValue("vetat", this.Etat);
                 var i = cm.ExecuteNonQuery();
@@ -50,7 +49,7 @@ namespace Lokasa.Models
             {
                 cnx.Open();
                 var cm = new MySqlCommand("update agent set mot_de_passe=@pwd where email=@email", cnx);
-                cm.Parameters.AddWithValue("@pwd", this.MotDePasse);
+                cm.Parameters.AddWithValue("@pwd", BCrypt.Net.BCrypt.HashPassword(MotDePasse));
                 cm.Parameters.AddWithValue("@email", this.Email);
                 var i = cm.ExecuteNonQuery();
                 if (i != 0)
@@ -114,7 +113,8 @@ namespace Lokasa.Models
             using (var cnx = new DbConnexion().GetConnection())
             {
                 cnx.Open();
-                var cm = new MySqlCommand("select fontion from agent where email=@email", cnx);
+                var cm = new MySqlCommand("select fonction from agent where email=@email", cnx);
+                //var IdAgent = GetId();
                 cm.Parameters.AddWithValue("@email", this.Email);
                 var reader = cm.ExecuteReader();
                 if (reader.Read())
@@ -128,12 +128,17 @@ namespace Lokasa.Models
             using (var cnx = new DbConnexion().GetConnection())
             {
                 cnx.Open();
-                var cm = new MySqlCommand("select * from agent where email=@email and mot_de_passe=@pwd", cnx);
+                var hachedPwd = string.Empty;
+                var cm = new MySqlCommand("select mot_de_passe from agent where email=@email", cnx);
                 cm.Parameters.AddWithValue("@email", this.Email);
-                cm.Parameters.AddWithValue("@pwd", this.MotDePasse);
                 var reader = cm.ExecuteReader();
                 if (reader.Read())
+                    hachedPwd = reader.GetString(0);
+                
+                if (BCrypt.Net.BCrypt.Verify(MotDePasse, hachedPwd))
                     _isTrue = true;
+                else
+                    _isTrue = false;
             }
 
             return _isTrue;
@@ -159,16 +164,39 @@ namespace Lokasa.Models
             using(var cnx = new DbConnexion().GetConnection())
             {
                 cnx.Open();
-                var cm = new MySqlCommand("select * from agent where email=@email and mot_de_passe=@pwd", cnx);
+                var hachedPwd = string.Empty;
+                var cm = new MySqlCommand("select mot_de_passe from agent where email=@email", cnx);
                 cm.Parameters.AddWithValue("@email", this.Email);
-                cm.Parameters.AddWithValue("@pwd", ParamPwd);
                 var reader = cm.ExecuteReader();
                 if(reader.Read())
+                    hachedPwd = reader.GetString(0);
+                
+                if(BCrypt.Net.BCrypt.Verify(ParamPwd, hachedPwd))
                     _isTrue = true;
                 else
                     _isTrue = false;
             }
             return _isTrue;
+        }
+
+        public string GetFullName()
+        {
+            var fullName = string.Empty;
+            using (var cnx = new DbConnexion().GetConnection())
+            {
+                cnx.Open();
+                using (var cm = new MySqlCommand("select nom,postnom,prenom from agent where id=@id", cnx))
+                {
+                    cm.Parameters.AddWithValue("@id", this.Id);
+                    using (var reader = cm.ExecuteReader())
+                    {
+                        if(reader.Read())
+                            fullName = reader.GetString(0)+" "+reader.GetString(1)+" "+reader.GetString(2);
+                    }
+                }
+            }
+            
+            return fullName;
         }
     }
 }
