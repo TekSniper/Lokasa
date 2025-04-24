@@ -1,6 +1,8 @@
 global using Lokasa.Models;
 global using MySql.Data.MySqlClient;
 global using System.Security.Cryptography;
+global using System.Text; 
+global using BCrypt.Net;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,6 +12,11 @@ builder.Services.AddSession(o =>
 {
     o.IdleTimeout = TimeSpan.FromMinutes(30);
 });
+builder.WebHost.ConfigureKestrel((context, options) =>
+    {
+        options.Configure(context.Configuration.GetSection("Kestrel"));
+    }
+);
 
 var app = builder.Build();
 

@@ -11,9 +11,10 @@ namespace Lokasa.Pages.Presence
         public string LoginAgent { get; set; } = string.Empty;
         public string FonctionAgent { get; set; } = string.Empty;
         public string ErrorMessage { get; set; } = string.Empty;
-        public Models.Presence presence = new Models.Presence();
+        //public Models.Presence presence = new Models.Presence();
         public List<Models.Presence> presences = new List<Models.Presence>();
         public Models.Agent agent = new Models.Agent();
+        public string PointerSortie = "Pointez votre sortie avant de quitter";
         public void OnGet()
         {
             try
@@ -24,12 +25,38 @@ namespace Lokasa.Pages.Presence
                     Response.Redirect("/");
                 else
                 {
-                    if (HttpContext.Session.GetString("Fonction") == "Directeur")
+                    if (FonctionAgent.Contains("Directeur") ||
+                        FonctionAgent.Contains("Admin") || 
+                        FonctionAgent.Contains("Secrétaire"))
                     {
-                        var vagent = Request.Query["ag"].ToString();
-                        var mois = Request.Query["mo"].ToString();
                         var date_r = Request.Query["date"].ToString();
-                        if (Request.Query["date"].ToString().Length == 0 && vagent.Length == 0)
+                        using (var cnx = new DbConnexion().GetConnection())
+                        {
+                            cnx.Open();
+                            using (var cm = new MySqlCommand("select * from presence where date_presence=@date",cnx))
+                            {
+                                cm.Parameters.AddWithValue("@date", date_r);
+                                using (var reader = cm.ExecuteReader())
+                                {
+                                    while (reader.Read())
+                                    {
+                                        var presence = new Models.Presence();
+                                        presence.Id = reader.GetInt64("id");
+                                        presence.IdAgent = reader.GetInt32("idagent");
+                                        presence.Jour = reader.GetString("jour");
+                                        presence.DatePresence = reader.GetDateTime("date_presence");
+                                        presence.HeureArrivee = reader.GetTimeSpan("heure_arrivee");
+                                        if(reader.IsDBNull(5))
+                                            presence.HeureDepart = TimeSpan.Zero;
+                                        else
+                                            presence.HeureDepart = reader.GetTimeSpan("heure_depart");
+                                        
+                                        presences.Add(presence);
+                                    }
+                                }
+                            }
+                        }
+                        /*if (Request.Query["date"].ToString().Length == 0 && vagent.Length == 0)
                         {
                             using (var cnx = new DbConnexion().GetConnection())
                             {
@@ -120,7 +147,7 @@ namespace Lokasa.Pages.Presence
                                     });
                                 }
                             }
-                        }
+                        }*/
                         /*
                         if (vagent.Length == 0 && (mois.Length == 0 || mois == "present"))
                         {

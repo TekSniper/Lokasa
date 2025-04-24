@@ -1,10 +1,19 @@
+@font-face {
+    font-family: 'poppins-regular';
+    src: url('~/fonts/Poppins-Regular.ttf')
+}
+@font-face {
+    font-family: 'opensans-regular';
+    src: url('~/fonts/opensans-regular.ttf');
+}
 html {
-  font-size: 14px;
+    font-family: 'Poppins';
+    font-size: 13px;
 }
 
 @media (min-width: 768px) {
   html {
-    font-size: 16px;
+    font-size: 14px;
   }
 }
 
@@ -18,5 +27,14 @@ html {
 }
 
 body {
-
+    font-family: 'Poppins';
+}
+input {
+    font-family: 'Poppins';
+}
+select {
+    font-family: 'Poppins';
+}
+textarea {
+    font-family: 'Poppins';
 }

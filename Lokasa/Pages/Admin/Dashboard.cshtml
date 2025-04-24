@@ -3,4 +3,129 @@
 @{
     ViewData["title"] = "Tableau de bord"; 
 }
-<h1 class="title">Tableau de bord</h1>
+<h1 class="subtitle"><i class="fa-solid fa-gauge-high"></i> Tableau de bord</h1>
+<div class="columns is-centered box has-background-warning">
+    <div class="column has-text-centered">
+        <h3 class="subtitle has-text-black"><i class="fa-solid fa-users"></i> Total agents actifs</h3>
+        <p class="title has-text-black">@Model.GetAgentsActifs()</p>
+    </div>
+    <div class="column has-text-centered">
+        <p class="subtitle has-text-black"><i class="fa-solid fa-person-circle-exclamation"></i> Agents présents</p>
+        <p class="title has-text-black">@Model.GetAgentsPressents()</p>
+    </div>
+    <div class="column has-text-centered">
+        <p class="subtitle has-text-black"><i class="fa-solid fa-square-check"></i> Tâches hébdo réalisées</p>
+        <p class="title has-text-black">@Model.GetNumTaskHebdo()</p>
+    </div>
+</div>
+<div class="columns is-centered">
+    <div class="column">
+        @if(Model.EtatsView.Count == 0)
+        {
+            <div class="notification is-warning">
+                <button class="delete"></button>
+                Aucune tâche disponible pour cette semaine.
+            </div>
+        }
+        else
+        {
+            <div class="columns is-centered">
+                <div class="column is-4">
+                    <div>
+                        <canvas id="statutChart"></canvas>
+                    </div>
+                </div>
+            </div>            
+        }
+    </div>
+</div>
+<div class="columns is-centered">
+    <div class="column">
+        <p class="subtitle"><i class="fa-solid fa-list-check"></i> Les dix dernières tâches</p>
+        <div>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>ID Agent</th>
+                        <th>Titre</th>
+                        <th>Date debut</th>
+                        <th>Date fin</th>
+                        <th>Etat</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if(Model.taches.Count > 0)
+                    {
+                        @foreach(var t in Model.taches)
+                        {
+                            <tr>
+                                <td>@t.Id</td>
+                                <td>@t.IdAgent</td>
+                                <td>@t.Titre</td>
+                                <td>@t.DateDebut</td>
+                                <td>@t.DateFin</td>
+                                <td>@t.Etat</td>
+                                <td>
+                                    <a href="/Tache/Details?ID=@t.Id&Agent=@t.IdAgent" class="button is-small is-link">Détails</a>
+                                    @if (t.Etat == 2 || t.Etat == 1)
+                                    {
+                                        <a href="/Tache/Valider?ID=@t.Id" class="button is-small is-success">Valider</a>
+                                        <a href="/Tache/Echec?ID=@t.Id" class="button is-small is-danger">Echec</a>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="7" class="has-text-cetered">
+                                <div>Aucune tâche enrégistrée</div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<script>
+    var ctx = document.getElementById('statutChart').getContext('2d');
+    var statutChart = new Chart(ctx, {
+        type: 'doughnut', // Représentation en camembert
+        data: {
+            labels: @Html.Raw(Json.Serialize(Model.EtatsView.Select(s => s.EtatTaches))), // Noms des statuts
+            datasets: [{
+                label: 'Statuts des tâches',
+                data: @Html.Raw(Json.Serialize(Model.EtatsView.Select(s => s.NombreTaches))), // Nombre de tâches par statut
+                backgroundColor: [
+                    'rgba(255, 159, 64, 0.6)',  // Couleur pour "En cours"
+                    'rgba(54, 162, 235, 0.6)',  // Couleur pour "En attente de validation"
+                    'rgba(75, 192, 192, 0.6) (Vert)',   // Couleur pour "Validée"
+                    'rgba(255, 99, 132, 0.6) (Rouge)'   // Couleur pour "Validée"
+                ],
+                borderColor: [
+                    'rgba(255, 159, 64, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(255, 99, 132, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top',
+                },
+                title: {
+                    display: true,
+                    text: 'Répartition des Statuts des Tâches'
+                }
+            }
+        }
+    });
+</script>

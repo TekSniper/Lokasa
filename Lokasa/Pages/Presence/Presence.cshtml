@@ -19,16 +19,9 @@
         <h5 class="subtitle">Filtre</h5>
         <div class="columns">
             <div class="column is-3">
-                <div class="field">
-                    <div class="control">
-                        <input type="date" name="date" class="input" id="date" />
-                    </div>
-                </div>
-            </div>
-            <div class="column is-4">
                 <div class="field has-addons">
                     <div class="control">
-                        <input type="text" name="agent" class="input" p placeholder="Login ou Email des l'agent" />
+                        <input type="date" name="date" class="input" id="date" />
                     </div>
                     <div class="control">
                         <input type="submit" value="Filtrez" class="button is-link" />
@@ -50,15 +43,25 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model.presences)
-        {
-            <tr>
-                <td>@item.Id</td>
-                <td>@item.IdAgent</td>
-                <td>@item.Jour</td>
-                <td>@item.DatePresence</td>
-                <td>@item.HeureArrivee</td>
-                <td>@item.HeureDepart</td>
-            </tr>
-        }
+    @foreach (var item in Model.presences)
+    {
+        <tr>
+            <td>@item.Id</td>
+            <td>@item.IdAgent</td>
+            <td>@item.Jour</td>
+            <td>@item.DatePresence</td>
+            <td>@item.HeureArrivee</td>
+            <td>
+                @if (item.HeureDepart == TimeSpan.Zero)
+                {
+                    @Model.PointerSortie
+                }
+                else
+                {
+                    @item.HeureDepart
+                }
+            </td>
+        </tr>
+    }
     </tbody>
+    </table>

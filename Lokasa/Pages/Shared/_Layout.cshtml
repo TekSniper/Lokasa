@@ -9,106 +9,114 @@
     <link href="~/lib/fontawesome/css/all.css" rel="stylesheet" />
     <link href="~/lib/fontawesome/css/all.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/sidebar.css" />
     <link rel="stylesheet" href="~/Lokasa.styles.css" asp-append-version="true" />
+    <script src="~/js/sidebar.js"></script>
+    <link rel="icon" type="image/png" href="~/img/lokasa_icon.png" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style type="text/css">
         .rotate {
-            transform: rotate(90deg);
+        transform: rotate(90deg);
         }
 
         .menu {
-            left: 0;
-            background: transparent !important;
+        left: 0;
+        background: transparent !important;
         }
 
-            .menu .menu-label {
-                font-weight: bolder;
-            }
+        .menu .menu-label {
+        font-weight: bolder;
+        }
 
-            .menu .menu-list .list {
-                position: relative;
-                cursor: pointer;
-            }
+        .menu .menu-list .list {
+        position: relative;
+        cursor: pointer;
+        }
 
-            .menu .menu-list {
-            }
+        .menu .menu-list {
+        }
 
-                .menu .menu-list .list {
-                    background: transparent !important;
-                }
+        .menu .menu-list .list {
+        background: transparent !important;
+        }
 
-                    .menu .menu-list .list .sub-list {
-                        background: transparent !important;
-                    }
+        .menu .menu-list .list .sub-list {
+        background: transparent !important;
+        }
 
-                        .menu .menu-list .list .sub-list .sub-menu {
-                            background: transparent !important;
-                        }
+        .menu .menu-list .list .sub-list .sub-menu {
+        background: transparent !important;
+        }
 
-                        .menu .menu-list .list .sub-list a:hover {
-                            background-color: rgba(0, 0, 0, 0.35);
-                        }
+        .menu .menu-list .list .sub-list a:hover {
+        background-color: rgba(0, 0, 0, 0.35);
+        }
 
-                    .menu .menu-list .list a {
-                        display: block;
-                        color: #181818 !important;
-                        text-decoration: none;
-                        padding: 5px 25px;
-                        line-height: 30px;
-                    }
+        .menu .menu-list .list a {
+        display: block;
+        color: #181818 !important;
+        text-decoration: none;
+        padding: 5px 25px;
+        line-height: 30px;
+        }
 
-                        .menu .menu-list .list a:hover {
-                            background-color: transparent !important;
-                            color: #111111;
-                            transition: 0.3s ease;
-                        }
+        .menu .menu-list .list a:hover {
+        background-color: transparent !important;
+        color: #111111;
+        transition: 0.3s ease;
+        }
 
-                        .menu .menu-list .list a .dropdown {
-                            position: absolute;
-                            right: 0;
-                            margin: 7.5px;
-                            transition: 0.3s ease;
-                        }
+        .menu .menu-list .list a .dropdown {
+        position: absolute;
+        right: 0;
+        margin: 7.5px;
+        transition: 0.3s ease;
+        }
 
-                    .menu .menu-list .list .sub-list {
-                        display: block;
-                        overflow-x: hidden;
-                    }
+        .menu .menu-list .list .sub-list {
+        display: block;
+        overflow-x: hidden;
+        }
 
         .sub-menu {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.3s ease;
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease;
         }
 
-            .sub-menu.open {
-                max-height: 500px;
-            }
+        .sub-menu.open {
+        max-height: 500px;
+        }
 
-            .sub-menu a {
-                color: #fff;
-                text-decoration: none;
-                padding: 15px 35px 10px;
-                line-height: 30px;
-            }
+        .sub-menu a {
+        color: #fff;
+        text-decoration: none;
+        padding: 15px 35px 10px;
+        line-height: 30px;
+        }
 
         .menu .menu-list .list .sub-menu a:hover {
-            background: transparent !important;
-            color: #fff;
-            transition: 0.3s ease;
+        background: transparent !important;
+        color: #fff;
+        transition: 0.3s ease;
         }
 
         /*.menu .menu-list .list .sub-list:hover + .sub-menu, .sub-menu:hover {
-                            display:block;
-                            transition: 0.3s ease;
-                        }*/
+        display:block;
+        transition: 0.3s ease;
+        }*/
         #sidebar {
-            transition: 0.3s ease-in-out;
-            transform: translateX(-100%);
+        transition: 0.3s ease-in-out;
+        transform: translateX(-100%);
         }
 
-            #sidebar.is-active {
-                transform: translateX(0);
-            }
+        #sidebar.is-active {
+        transform: translateX(0);
+        }
+
+        .navbar-burger.is-active span {
+            background-color: #ff3860; /* Exemple : couleur rouge */
+        }
     </style>
 </head>
 <body>
@@ -120,14 +128,14 @@
                     <strong>LOKASA</strong>
                 </a>
 
-                <a class="navbar-burger is-active" role="button" aria-label="menu" aria-expanded="false">
+                <a class="navbar-burger" role="button" aria-label="menu" aria-expanded="false" data-target="navbarBasic">
                     <span aria-hidden="true"></span>
                     <span aria-hidden="true"></span>
                     <span aria-hidden="true"></span>
                     <span aria-hidden="true"></span>
                 </a>
             </div>
-            <div class="navbar-menu is-active">
+            <div id="navbarBasic" class="navbar-menu">
                 <!-- navbar start, navbar end -->
                 <div class="navbar-start">
                     <span class="navbar-item">
@@ -136,15 +144,22 @@
                     <span class="navbar-item">
                         <i class="fa-solid fa-briefcase"></i>&nbsp; @Model.FonctionAgent
                     </span>
-                </div>                
+                </div>   
+                <div class="navbar-end">
+                    <span class="navbar-item">
+                        <a href="/Agent/Deconnexion" class="button is-danger is-outlined is-small">Se Deconnecter</a>
+                    </span>
+                </div>
             </div>
         </nav>
     </header>
     <div class="container is-fullhd mt-6 pt-5">
         <div class="columns">
-            <div class="column is-2 ml-3">
+            <div class="column is-one-fifth ml-3">
                 <aside class="menu">
-                    @if(Model.FonctionAgent == "Directeur"){
+                    @if (Model.FonctionAgent.Contains("Directeur") || Model.FonctionAgent.Contains("Secrétaire") 
+                    || Model.FonctionAgent.Contains("Admin"))
+                    {
                         <p class="menu-label"><i class="fa-solid fa-user-gear"></i>&nbsp;Administrateur</p>
                         <ul class="menu-list">
                             <li class="list">
@@ -162,6 +177,12 @@
                                     <i class="fa-solid fa-list-check"></i> Rapport taches
                                 </a>
                             </li>
+                        </ul>
+                    }
+                    @if(Model.FonctionAgent.Contains("Directeur") || Model.FonctionAgent.Contains("Admin"))
+                    {
+                        <p class="menu-label">Gestion des agents</p>
+                        <ul class="menu-list">
                             <li class="list">
                                 <a href="/Agent/LesAgents?manlog=all" class="sub-list">
                                     <i class="fa-solid fa-list"></i> Les agents
@@ -174,6 +195,7 @@
                             </li>
                         </ul>
                     }
+                    
                     <p class="menu-label">Gestion de Présence</p>
                     <ul class="menu-list">
                         <li class="list">
@@ -186,11 +208,14 @@
                                 <i class="fa-solid fa-business-time"></i> Départ
                             </a>
                         </li>
-                        <li class="list">
-                            <a class="sub-list" href="/Presence/Presence">
-                                <i class="fa-solid fa-clipboard-user"></i> Présence
-                            </a>
-                        </li>
+                        @* @if(Model.FonctionAgent == "Directeur")
+                        {
+                            <li class="list">
+                                <a class="sub-list" href="/Presence/Presence">
+                                    <i class="fa-solid fa-clipboard-user"></i> Présence
+                                </a>
+                            </li>
+                        }  *@                       
                     </ul>
                     <p class="menu-label">Gestion des Tâches</p>
                     <ul class="menu-list">
@@ -208,7 +233,18 @@
                 </aside>
             </div>
             <div class="column">
-                <div class="box">
+                @*<!-- Barre de navigation visible uniquement en mobile -->
+                <nav class="navbar is-light is-hidden-tablet" style="z-index: 30;">
+                    <div class="navbar-brand">
+                        <!-- Bouton burger uniquement en mobile -->
+                        <a role="button" class="navbar-burger" id="menu-toggle-2" aria-label="menu" aria-expanded="false">
+                            <span aria-hidden="true"></span>
+                            <span aria-hidden="true"></span>
+                            <span aria-hidden="true"></span>
+                        </a>
+                    </div>
+                </nav>*@
+                <div class="section box">
                     <main role="main" class="pb-3">
                         @RenderBody()
                     </main>

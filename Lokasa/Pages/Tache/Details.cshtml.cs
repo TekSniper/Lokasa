@@ -13,9 +13,10 @@ namespace Lokasa.Pages.Tache
         public string ErrorMessage { get; set; } = string.Empty;
         public string SuccessMessage { get; set; } = string.Empty;
         public Models.Presence presence = new Models.Presence();
-        public Models.Agent agent = new Models.Agent();
+        public Models.Agent agent { get; set; } = new Models.Agent();
         public Models.Tache tache = new Models.Tache();
         public List<Models.Tache> taches = new List<Models.Tache>();
+        public string AgentFullName = string.Empty;
         public void OnGet()
         {
             try
@@ -28,11 +29,11 @@ namespace Lokasa.Pages.Tache
                     Response.Redirect("/");
                 else
                 {
-                    presence.DatePresence = DateTime.Now.Date;
-                    presence.IdAgent = agent.GetId();
-                    var estPresent = presence.CheckPresence();
-                    if (estPresent)
+                    var estAutorise = FonctionAgent.Contains("Directeur") || FonctionAgent.Contains("Admin");
+                    if (estAutorise)
                     {
+                        agent.Id = int.Parse(Request.Query["Agent"].ToString());
+                        AgentFullName = agent.GetFullName();
                         tache.Id = int.Parse(Request.Query["ID"].ToString());
                         using (var cnx = new DbConnexion().GetConnection())
                         {
@@ -47,14 +48,14 @@ namespace Lokasa.Pages.Tache
                                 tache.Description = dr.GetString("description");
                                 tache.DateDebut = dr.GetDateTime("date_debut").Date;
                                 tache.DateFin = dr.GetDateTime("date_fin").Date;
-                                tache.Etat = dr.GetString("etat");
+                                tache.Etat = dr.GetByte("etat");
                                 tache.Commentaire = dr.GetString("commentaire");
                             }
                         }
                     }
                     else
                     {
-                        WarningMessage = "Vous n'avez pas marqué votre présence pour aujourd'hui";
+                        Response.Redirect("/Tache/Taches");
                     }
                 }
             }
@@ -73,7 +74,7 @@ namespace Lokasa.Pages.Tache
                 tache.Description = Request.Form["description"].ToString();
                 tache.DateDebut = Convert.ToDateTime(Request.Form["dateDebut"]).Date;
                 tache.DateFin = Convert.ToDateTime(Request.Form["dateFin"]).Date;
-                tache.Etat = Request.Form["etat"].ToString();
+                tache.Etat = byte.Parse(Request.Form["etat"].ToString());
                 tache.Commentaire = Request.Form["commentaire"].ToString();
                 if(tache.Titre.Length == 0 || tache.Description.Length == 0 || tache.DateDebut == DateTime.MinValue || tache.DateFin == DateTime.MinValue)
                 {

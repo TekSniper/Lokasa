@@ -18,13 +18,9 @@ namespace Lokasa.Pages.Agent
             FonctionAgent = HttpContext.Session.GetString("Fonction")!;
             if(LoginAgent != null)
             {
-                if(FonctionAgent != "Directeur")
+                if(FonctionAgent.Contains("Directeur") || FonctionAgent.Contains("Admin"))
                 {
-                    Response.Redirect("/Tache/Taches");
-                }
-                else
-                {
-                    switch(Request.Query["manlog"].ToString() == "all")
+                    switch(Request.Query["manlog"].ToString() == "all" || Request.Query["manlog"].ToString() == "")
                     {
                         case true:
                             {
@@ -46,7 +42,7 @@ namespace Lokasa.Pages.Agent
                                         ag.Prenom = reader.GetString("prenom").ToUpper();
                                         ag.Genre = reader.GetString("genre");
                                         ag.Email = reader.GetString("email");
-                                        ag.Fonction = reader.GetString("fontion");
+                                        ag.Fonction = reader.GetString("fonction");
                                         ag.Etat = reader.GetString("etat");
 
                                         agents.Add(ag);
@@ -78,7 +74,7 @@ namespace Lokasa.Pages.Agent
                                         ag.Prenom = reader.GetString("prenom").ToUpper();
                                         ag.Genre = reader.GetString("genre");
                                         ag.Email = reader.GetString("email");
-                                        ag.Fonction = reader.GetString("fontion");
+                                        ag.Fonction = reader.GetString("fonction");
                                         ag.Etat = reader.GetString("etat");
 
                                         agents.Add(ag);
@@ -86,7 +82,11 @@ namespace Lokasa.Pages.Agent
                                 }
                             }
                             break;
-                    }                    
+                    }
+                }
+                else
+                {
+                    Response.Redirect("/Tache/Taches");
                 }
             }
             else

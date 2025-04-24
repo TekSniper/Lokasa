@@ -85,11 +85,13 @@
         <div class="column is-4">
             <label for="etat" class="label">Etat</label>
             <div class="control">
-                <div class="select">
-                    <select name="etat" id="etat">
-                        <option value="En cours">En cours</option>
-                        <option value="Validée">Validée</option>
-                        <option value="Echec">Echec</option>
+                <div class="select is-fullwidth">
+                    <select name="etat" id="etat" class="">
+                        <option value="---">---</option>
+                        @foreach (var e in Model.GetEtats())
+                        {
+                            <option value="@e.Id">@e.Designation</option>
+                        }
                     </select>
                 </div>
             </div>

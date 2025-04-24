@@ -23,11 +23,11 @@ namespace Lokasa.Pages.Agent
             FonctionAgent = HttpContext.Session.GetString("Fonction")!;
             if (LoginAgent != null)
             {
-                if (FonctionAgent != "Directeur")
-                    Response.Redirect("/Tache/Taches");
+                if (FonctionAgent.Contains("Directeur") || FonctionAgent.Contains("Admin"))
+                {}
                 else 
                 {
-
+                    Response.Redirect("/Tache/Taches");
                 }
             }
             else
@@ -97,7 +97,7 @@ namespace Lokasa.Pages.Agent
                     var isCreated = agent.Create();
                     if (isCreated)
                     {
-                        SuccessMessage = "Compte créé avec succès !";
+                        SuccessMessage = "Compte crï¿½ï¿½ avec succï¿½s !";
                         agent.Matricule = string.Empty;
                         agent.Nom = string.Empty;
                         agent.PostNom = string.Empty;
@@ -111,7 +111,7 @@ namespace Lokasa.Pages.Agent
                     }
                     else
                     {
-                        ErrorMessage = "Echec de la création du compte d'un agent";
+                        ErrorMessage = "Echec de la crï¿½ation du compte d'un agent";
                         LoginAgent = HttpContext.Session.GetString("Login")!;
                         FonctionAgent = HttpContext.Session.GetString("Fonction")!;
                     }

@@ -16,24 +16,6 @@ namespace Lokasa.Pages
         public string LoginAgent { get; set; } = string.Empty;
         public string FonctionAgent { get; set; } = string.Empty;
         private readonly ILogger<IndexModel> _logger;
-
-        private string EncryptPassword(string stringToEncrypt)
-        {
-            var pwd_encrypted = string.Empty;
-            using (SHA256 sha256 = SHA256.Create())
-            {
-                byte[] bytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(stringToEncrypt));
-                StringBuilder builder = new StringBuilder();
-                for (int i = 0; i < bytes.Length; i++)
-                {
-                    builder.Append(bytes[i].ToString("x2"));
-                }
-
-                pwd_encrypted = builder.ToString();
-            }
-
-            return pwd_encrypted;
-        }
         public IndexModel(ILogger<IndexModel> logger)
         {
             _logger = logger;
@@ -44,7 +26,7 @@ namespace Lokasa.Pages
             FonctionAgent = HttpContext.Session.GetString("Fonction")!;
             if(LoginAgent != null)
             {
-                if(FonctionAgent == "Directeur")
+                if(FonctionAgent.Contains("Directeur") || FonctionAgent.Contains("Admin"))
                 {
                     Response.Redirect("/Admin/Dashboard");
                 }
@@ -63,7 +45,7 @@ namespace Lokasa.Pages
             try
             {
                 agent.Email = Request.Form["email"].ToString();
-                agent.MotDePasse = EncryptPassword(Request.Form["pwd"].ToString());
+                agent.MotDePasse = Request.Form["pwd"].ToString();
                 if(agent.Email.Length == 0)
                 {
                     EmptyField1 = "Vueillez remplir votre identifiant ou email...";
@@ -87,7 +69,7 @@ namespace Lokasa.Pages
                                     {
                                         case true:
                                             {
-                                                var isDefaultPwd = agent.IsDefaultPassword(EncryptPassword("123456"));
+                                                var isDefaultPwd = agent.IsDefaultPassword("123456");
                                                 if (isDefaultPwd)
                                                 {
                                                     HttpContext.Session.SetString("Login", agent.Email);
@@ -98,8 +80,10 @@ namespace Lokasa.Pages
                                                 {
                                                     HttpContext.Session.SetString("Login", agent.Email);
                                                     HttpContext.Session.SetString("Fonction", agent.GetFonction());
-                                                    var fx = HttpContext.Session.GetString("Fonction");
-                                                    if (fx == "Directeur")
+                                                    var fx = HttpContext.Session.GetString("Fonction")!;
+                                                    var mot = "Directeur";
+                                                    var mot2 = "Admin";
+                                                    if (fx.Contains(mot) || fx.Contains(mot2))
                                                     {
                                                         Response.Redirect("/Admin/Dashboard");
                                                     }
@@ -112,7 +96,7 @@ namespace Lokasa.Pages
                                             break;
                                         case false:
                                             {
-                                                ErrorMessage = "Echec lors de la connexion. Veuillez vérifier vos identifiants, le login et/ou le mot de passe...";
+                                                ErrorMessage = "Echec lors de la connexion. Veuillez vÃ©rifier vos identifiants, le login et/ou le mot de passe...";
                                                 agent.MotDePasse = string.Empty;
                                             }
                                             break;

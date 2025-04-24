@@ -1,0 +1,27 @@
+@page
+@using MySql.Data.MySqlClient
+
+@{
+    Layout = null;
+    try
+    {
+        var Id = long.Parse(Request.Query["ID"].ToString());
+        var sql = "update tache set etat=@etat where id=@id";
+        using (var cnx = new DbConnexion().GetConnection())
+        {
+            cnx.Open();
+            using (var cm = new MySqlCommand(sql,cnx))
+            {
+                cm.Parameters.AddWithValue("@etat", Convert.ToByte("4"));
+                cm.Parameters.AddWithValue("@id", Id);
+                cm.ExecuteNonQuery();
+            }
+        }
+    }
+    catch (Exception e)
+    {
+        Console.WriteLine(e);
+        throw;
+    }
+    Response.Redirect("/Admin/Dashboard");
+}

@@ -33,12 +33,64 @@
     </div>
     </p>
 }
-<h3 class="title">Modification d'une tâche</h3>
-<h5 class="subtitle">Vous êtes entrain de modifier la tâche @Model.tache.Titre</h5>
+<h3 class="title"><i class="fa-solid fa-circle-info"></i> Détails</h3>
+<h4 class="subtitle">Les détails de la tâche <strong>@Model.tache.Titre</strong></h4>
+<p>Réalisée par : <strong>@Model.AgentFullName</strong></p>
+
+<input type="hidden" name="id" value="@Model.tache.Id" />
+<input type="hidden" name="idAgent" value="@Model.tache.IdAgent" />
+<div class="columns is-centered">
+    <div class="column">
+        <table class="table">
+            <tr>
+                <th>Titre</th>
+                <td>@Model.tache.Titre</td>
+            </tr>
+            <tr>
+                <th>Description</th>
+                <td>@Model.tache.Description</td>
+            </tr>
+            <tr>
+                <th>Date debut</th>
+                <td>@Model.tache.DateDebut</td>
+            </tr>
+            <tr>
+                <th>Date Fin</th>
+                <td>@Model.tache.DateFin</td>
+            </tr>
+            <tr>
+                <th>Etat</th>
+                <td>@Model.tache.Etat</td>
+            </tr>
+            <tr>
+                <th>Commentaire</th>
+                <td>@Model.tache.Commentaire</td>
+            </tr>
+        </table>
+    </div>
+</div>
+<div class="columns">
+    <div class="column">
+        @if (Model.tache.Etat == 3 || Model.tache.Etat == 4)
+        {
+
+        }
+        else
+        {
+            <div class="field is-grouped">
+                <div class="control">
+                    <a href="/Tache/Valider?ID=@Model.tache.Id" class="button is-success">Validée</a>
+                </div>
+                <div class="control">
+                    <a href="/Tache/Echec?ID=@Model.tache.Id" class="button is-danger">Echec</a>
+                </div>
+            </div>
+        }
+    </div>
+</div>
 <form method="post">
-    <input type="hidden" name="id" value="@Model.tache.Id" />
-    <input type="hidden" name="idAgent" value="@Model.tache.IdAgent" />
-    <div class="columns">
+    
+    @*<div class="columns">
         <div class="column">
             <div class="field">
                 <label for="titre" class="label">Titre</label>
@@ -110,5 +162,5 @@
         <div class="control">
             <input type="reset" value="Réinitialiser" class="is-danger is-outlined">
         </div>
-    </div>
+    </div>*@
 </form>
