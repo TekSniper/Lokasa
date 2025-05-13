@@ -96,9 +96,9 @@
     var statutChart = new Chart(ctx, {
         type: 'doughnut', // Représentation en camembert
         data: {
-            labels: @Html.Raw(Json.Serialize(Model.EtatsView.Select(s => s.EtatTaches))), // Noms des statuts
+            labels: @Html.Raw(Json.Serialize(Model.EtatsView.Select(s => s.DesignationEtat))), // Noms des statuts
             datasets: [{
-                label: 'Statuts des tâches',
+                label: 'Nombre des tâches',
                 data: @Html.Raw(Json.Serialize(Model.EtatsView.Select(s => s.NombreTaches))), // Nombre de tâches par statut
                 backgroundColor: [
                     'rgba(255, 159, 64, 0.6)',  // Couleur pour "En cours"

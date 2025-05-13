@@ -23,9 +23,9 @@ namespace Lokasa.Pages.Admin
                     using(var cnx = new DbConnexion().GetConnection())
                     {
                         cnx.Open();
-                        using(var cm = new MySqlCommand("SELECT etat, COUNT(*) AS NombreTaches " +
-                            "FROM tache WHERE WEEK(date_debut) = WEEK(CURDATE()) AND " +
-                            "YEAR(date_debut) = YEAR(CURDATE()) GROUP BY etat", cnx))
+                        using(var cm = new MySqlCommand("SELECT t.etat,e.designation, COUNT(*) AS NombreTaches " +
+                            "FROM tache t inner join etat e on t.etat = e.id WHERE WEEK(date_debut) = WEEK(CURDATE()) AND " +
+                            "YEAR(date_debut) = YEAR(CURDATE()) GROUP BY t.etat", cnx))
                         {
                             using (var reader = cm.ExecuteReader())
                             {
@@ -34,7 +34,8 @@ namespace Lokasa.Pages.Admin
                                     EtatsView.Add(new ChartView
                                     {
                                         EtatTaches = reader.GetByte(0),
-                                        NombreTaches = reader.GetInt64(1)
+                                        NombreTaches = reader.GetInt64(2),
+                                        DesignationEtat = reader.GetString(1)
                                     });
                                 }
                             }
